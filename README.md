@@ -122,15 +122,89 @@ max_tokens: 1500
 | `--max-tokens` | | Maximum tokens in response |
 | `--raw` | | Return raw response without formatting |
 
-## Repository
+## Configuration
 
-🔗 **GitHub**: https://github.com/AaronHTan/llm-magic
+### Global Configuration
 
-This project implements a comprehensive solution following the blueprint from your implementation requirements. The repository contains all source code, documentation, examples, and tests for the LLM Magic Jupyter extension.
+Create `~/.llm_magic/config.yaml`:
 
-## License
+```yaml
+debug: false
+default_provider: openai
+default_openai_model: gpt-4
+default_claude_model: claude-3-sonnet-20240229
+max_context_cells: 10
+max_tokens: 2000
+temperature: 0.7
+log_requests: false
+```
 
-MIT License
+### Environment Variables
+
+- `OPENAI_API_KEY`: Your OpenAI API key
+- `ANTHROPIC_API_KEY`: Your Anthropic API key
+- `LLM_MAGIC_DEBUG`: Enable debug mode
+- `LLM_MAGIC_DEFAULT_PROVIDER`: Default LLM provider
+- `LLM_MAGIC_LOG_REQUESTS`: Enable request logging
+
+## Advanced Features
+
+### Context Management
+
+The magic automatically includes:
+- Previous notebook cells (configurable number)
+- Current variable values and types
+- Execution history
+
+### Security Features
+
+- API key validation
+- Input sanitization
+- Code execution warnings for dangerous operations
+- Configurable logging and audit trails
+
+### Logging
+
+All LLM requests can be logged for analysis:
+
+```python
+%%llm_config
+log_requests: true
+log_file: /path/to/logfile.json
+```
+
+## Development
+
+### Project Structure
+
+```
+llm_magic/
+├── src/llm_magic/
+│   ├── __init__.py       # Main package
+│   ├── magic.py          # IPython magic implementation
+│   ├── clients.py        # LLM client implementations
+│   ├── bridge.py         # IPython/Jupyter integration
+│   ├── config.py         # Configuration management
+│   └── logging.py        # Logging and security
+├── examples/
+│   └── demo_notebook.ipynb
+├── tests/
+├── requirements.txt
+└── setup.py
+```
+
+### Running Tests
+
+```bash
+# Install test dependencies
+pip install pytest pytest-cov
+
+# Run tests
+pytest tests/
+
+# Run with coverage
+pytest --cov=llm_magic tests/
+```
 
 ## Contributing
 
@@ -139,3 +213,56 @@ MIT License
 3. Make your changes
 4. Add tests
 5. Submit a pull request
+
+## Examples
+
+Check out the `examples/demo_notebook.ipynb` for comprehensive usage examples.
+
+## Troubleshooting
+
+### Common Issues
+
+1. **API Key Not Found**
+   - Ensure environment variables are set correctly
+   - Check `.env` file location and format
+
+2. **Module Not Found**
+   - Verify installation: `pip list | grep llm-magic`
+   - Try reinstalling: `pip install -e .`
+
+3. **JavaScript Injection Not Working**
+   - Ensure you're running in a Jupyter notebook (not JupyterLab console)
+   - Check browser console for errors
+
+### Debug Mode
+
+Enable debug mode to see detailed information:
+
+```python
+%%llm_config
+debug: true
+```
+
+This will show:
+- Full prompts sent to LLMs
+- API response details
+- Context information
+
+## Repository
+
+🔗 **GitHub**: https://github.com/AaronHTan/llm-magic
+
+This project implements a comprehensive solution following the blueprint from your implementation requirements. The repository contains all source code, documentation, examples, and tests for the LLM Magic Jupyter extension.
+
+## License
+
+MIT License - see LICENSE file for details.
+
+## Changelog
+
+### v0.1.0
+- Initial release
+- Support for OpenAI and Claude
+- Basic magic command functionality
+- Context awareness
+- Configuration system
